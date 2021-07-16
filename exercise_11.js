@@ -2,40 +2,47 @@ const TIPO_NO = 'no';
 const TIPO_FOLHA = 'folha';
 
 class No {
+
+    #valor;
+    #direita;
+    #esquerda;
+
     constructor(valor) {
-        this._valor = valor;
-        this._tipo = TIPO_NO;
+        this.#valor = valor;
     }
 
     get valor() {
-        return this._valor;
+        return this.#valor;
     }
 
-    get tipo() {
-        return this._tipo;
+    tipo() {
+        return TIPO_NO;
     }
 
     get direita() {
-        return this._direita;
+        return this.#direita;
     }
 
     set direita(e) {
-        this._direita = e;
+        this.#direita = e;
     }
 
     get esquerda() {
-        return this._esquerda;
+        return this.#esquerda;
     }
 
     set esquerda(e) {
-        this._esquerda = e;
+        this.#esquerda = e;
     }
 }
 
 class Folha extends No {
     constructor(valor) {
         super(valor);
-        this._tipo = TIPO_FOLHA;
+    }
+
+    tipo() {
+        return TIPO_FOLHA;
     }
 
     get direita() {
@@ -49,28 +56,30 @@ class Folha extends No {
 
 class Arvore {
 
+    #raiz;
+    
     constructor(valorRaiz) {
-        this._raiz = new Folha(valorRaiz);
+        this.#raiz = new Folha(valorRaiz);
     }
 
     get raiz() {
-        return this._raiz;
+        return this.#raiz;
     }
 
     inserirValor(valor) {
-        this._raiz = this._inserir(this._raiz, valor);
+        this.#raiz = this.#inserir(this.#raiz, valor);
     }
     
-    _inserir(noAtual, valor) {
+    #inserir(noAtual, valor) {
         if (noAtual === undefined) {
             return new Folha(valor);
         }
 
-        if (noAtual.tipo === TIPO_NO) {
+        if (noAtual.tipo() === TIPO_NO) {
             if (valor > noAtual.valor) {
-                noAtual.direita = this._inserir(noAtual.direita, valor);
+                noAtual.direita = this.#inserir(noAtual.direita, valor);
             } else {
-                noAtual.esquerda = this._inserir(noAtual.esquerda, valor);
+                noAtual.esquerda = this.#inserir(noAtual.esquerda, valor);
             }
         } else {
             let novaFolha = new Folha(valor);
@@ -85,14 +94,14 @@ class Arvore {
     }
 
     print() {
-        this._print('', this._raiz, false);
+        this.#print('', this.#raiz, false);
     }
 
-    _print(prefixo, no, ehEsquerdo) {
+    #print(prefixo, no, ehEsquerdo) {
         if (no !== undefined) {
             console.log(prefixo + (ehEsquerdo ? "|-- " : "\\-- ") + no.valor);
-            this._print(prefixo + (ehEsquerdo ? "|   " : "    "), no.esquerda, true);
-            this._print(prefixo + (ehEsquerdo ? "|   " : "    "), no.direita, false);
+            this.#print(prefixo + (ehEsquerdo ? "|   " : "    "), no.esquerda, true);
+            this.#print(prefixo + (ehEsquerdo ? "|   " : "    "), no.direita, false);
         }
     }
 }
